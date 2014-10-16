@@ -1,4 +1,5 @@
 require "erb"
+require './app/models/user_model.rb'
 class Basecontroller
 
 	 #    def initialize(params)
@@ -13,7 +14,7 @@ class Basecontroller
 class UserController < Basecontroller
 
   def index
-     @users=["alen","harry@","been"]
+     @users = User.all
   	 render "user/index"
   end
 end
