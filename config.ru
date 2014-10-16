@@ -1,6 +1,9 @@
 $LOAD_PATH << "."
 require 'rack' 
 require 'erb'
+require 'rubygems'
+
+require 'rack/server'
 
 use Rack::Static
 use Rack::Static,

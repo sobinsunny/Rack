@@ -1,4 +1,7 @@
 require "erb"
+require 'rubygems'
+require 'rack'
+require 'rack/server'
 require './app/controllers/base.rb'
 require './app/models/user_model.rb'
 
