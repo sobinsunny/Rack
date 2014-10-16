@@ -1,8 +1,11 @@
-class User< ActiveRecord::Migration
-  def up
-     create_table :users, force: true do |t|
-      t.string :username
-      t.string :password
-    end
+require 'mysql'
+require 'active_record'
+require 'yaml'
+dbconfig = YAML::load(File.open('./app/config/database.yml'))
+ActiveRecord::Base.establish_connection(dbconfig)
+class User < ActiveRecord::Base
+
+  def index
+    @users=User.all
   end
 end
