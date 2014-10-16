@@ -36,7 +36,7 @@ class Blog
 			if load controller_file
 
 				class_name=controller_class.capitalize+"Controller"
-				ob=eval(class_name+".new()")
+				ob=eval(class_name+".new(@params)")
 				Rack::Response.new(ob.send("index"))
 				#[200, {"Content-Type"=>"text/html"},["#{class_name}"]]
 
