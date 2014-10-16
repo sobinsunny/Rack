@@ -1,0 +1,12 @@
+<h1>Listing articles</h1>
+ 
+<table>
+  <tr>
+    <th>Title</th>    
+  </tr>
+   <% @users.each do |article| %>
+    <tr>
+      <td><%=article%></td>
+    </tr>
+  <%end %>
+</table>

@@ -1,0 +1,59 @@
+$LOAD_PATH << "."
+require 'rack' 
+require 'erb'
+
+use Rack::Static
+use Rack::Static,
+  :urls => ["/images", "/js", "/css"],
+  :root => "public"
+
+
+	 class Blog
+	 			def self.call(env)
+	 				new(env).response
+	 			end
+
+     			def initialize(env)
+     				@request=Rack::Request.new(env)
+     			end
+	 	 	    def response
+			           @path=@request.path
+			           @method=@request.request_method
+			           @params=@request.params	
+			           	        		           
+			           if @method=='GET'
+			             # [200, {"Content-Type"=>"text/html"},["#{@method}"]]
+			           	   
+			           	 if( @path=='/user'||@path=="/")
+			           	 	 @users=["alen","harry","been"]
+			           	 	Rack::Response.new(render 'user/index')			           	 	
+			           	   	   	
+			           	 elsif  (!!@path.match('/user\/\d'))||@path=="/user/view"
+			           	 	
+			           	 	controller="user"
+			           	 	action="index"
+			           	 	controller_file="./app/controllers/"+controller+"_control.rb"
+							if load controller_file
+
+									class_name=controller.capitalize+"Controller"
+									#responce=class_name.index("@params")
+									 
+			           	 			Rack::Response.new(render 'user/index')			  
+							end		
+							           	 	
+     		              
+     		            else
+     		          		 [404, {"Content-Type"=>"text/html"},["Not found"]]
+     		            end
+     		        end
+     		    end   
+		        def render(template)
+					path=File.expand_path("../app/view/#{template}.html.erb",__FILE__)
+					ERB.new(File.read(path)).result(binding)
+					end       	
+		        #
+    end      
+
+use Rack::CommonLogger
+use Rack::ContentLength
+run Blog
