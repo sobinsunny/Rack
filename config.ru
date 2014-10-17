@@ -26,28 +26,24 @@ class Blog
 		@params=@request.params	
 
 	   if @method=='GET'
-# [200, {"Content-Type"=>"text/html"},["#{@method}"]]
 
-		if( @path=='/user'||@path=="/")
-			@users=["alen","harry","been"]
-			Rack::Response.new(render 'user/index')			           	 	
+				if( @path=='/user'||@path=="/")
+					@users=["alen","harry","been"]
+					Rack::Response.new(render 'user/index')	
+				end		           	 	
 
-		#elsif  (!!@path.match('/user\/\d'))||@path=="/user/view"
-		elsif  @path=="/user/view"
-			controller_class,action=get_controller_and_action(@path)
-			controller_file="./app/controllers/"+controller_class+"_control.rb"
-			if load controller_file
+						controller_class,action=get_controller_and_action(@path)
+						controller_file="./app/controllers/"+controller_class+"_control.rb"
 
-				class_name=controller_class.capitalize+"Controller"
-				ob=eval(class_name+".new(@params)")
-				Rack::Response.new(ob.send("index"))
-				#[200, {"Content-Type"=>"text/html"},["#{class_name}"]]
-
-			end					           	 	
+				if load controller_file
+					
+						class_name=controller_class.capitalize+"Controller"
+						ob=eval(class_name+".new(@params)")
+						Rack::Response.new(ob.send(action))
+				end					           	 	
 		else
-			[404, {"Content-Type"=>"text/html"},["Not found"]]
+				[404, {"Content-Type"=>"text/html"},["Not found"]]
 		end
-	    end
 	end
 
 
@@ -55,19 +51,19 @@ class Blog
 
 #Helping function  for request processing
 
-def render(template)
+				def render(template)
 
-	path=File.expand_path("../app/view/#{template}.html.erb",__FILE__)
-	ERB.new(File.read(path)).result(binding)
+					path=File.expand_path("../app/view/#{template}.html.erb",__FILE__)
+					ERB.new(File.read(path)).result(binding)
 
-end 
+				end 
 
-def get_controller_and_action(path)
+				def get_controller_and_action(path)
 
-	_,controller_name,action=path.split("/")					      
-	return  controller_name,action
-end      	
-#
+					_,controller_name,action=path.split("/")					      
+					return  controller_name,action
+				end      	
+				
 end      
 
 use Rack::CommonLogger
