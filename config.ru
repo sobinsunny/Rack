@@ -23,48 +23,80 @@ class Blog
 
 		@path=@request.path
 		@method=@request.request_method
-		@params=@request.params	
+		params=@request.params	
+	  	controller_class,action,id=get_controller_and_action(@path)
 
-	   if @method=='GET'
+        case @method
 
-				if( @path=='/user'||@path=="/")
-					@users=["alen","harry","been"]
-					Rack::Response.new(render 'user/index')	
-				end		           	 	
-
-						controller_class,action=get_controller_and_action(@path)
-						controller_file="./app/controllers/"+controller_class+"_control.rb"
-
-				if load controller_file
-					
-						class_name=controller_class.capitalize+"Controller"
-						ob=eval(class_name+".new(@params)")
-						Rack::Response.new(ob.send(action))
-				end					           	 	
-		else
-				[404, {"Content-Type"=>"text/html"},["Not found"]]
+		    when 'GET'
+		    		calling_fuc(controller_class,action,id,params)	   		
+		    when 'POST'
 		end
 	end
 
 
+# #Helping function  for request processing
 
 
-#Helping function  for request processing
+				def calling_fuc(contr_name,action,id,params)
 
-				def render(template)
+		                controller_file="./app/controllers/"+contr_name+"_control.rb"
 
-					path=File.expand_path("../app/view/#{template}.html.erb",__FILE__)
-					ERB.new(File.read(path)).result(binding)
+						if load controller_file
 
-				end 
+								class_name=contr_name.capitalize+"Controller"
+								ob=eval(class_name+".new(id,params)")
+								Rack::Response.new(ob.send(action))
+						end					           	 	
 
-				def get_controller_and_action(path)
 
-					_,controller_name,action=path.split("/")					      
-					return  controller_name,action
-				end      	
-				
+				end
+
+			def get_controller_and_action(path)
+					 
+					case path
+							when /^\/$/
+								Rack::Response.new(render 'index')
+
+							when /^\/(\w+)(\/)?$/
+								
+								controller="#{$1}"	
+
+									return [controller,nil,nil]
+
+							when /^\/(\w+)(\/)?([a-zA-Z_]+)(\/)?$/
+									
+									controller="#{$1}"
+									action="#{$3}"
+								   return [controller,action,nil]			
+
+
+							when /^\/(\w+)(\/)?(\d+)(\/)?(\w*)?(\/)?$/
+
+										controller="#{$1}"
+										action="#{$5}"
+										id="#{$3}"
+										return [controller,action,id]
+					end
+		    end
+
+
+
+#Helping function  for TEMPLATE RENDERING
+
+		def render(template)
+
+			path=File.expand_path("../app/view/#{template}.html.erb",__FILE__)
+			ERB.new(File.read(path)).result(binding)
+
+		end 
+
 end      
+
+use Rack::CommonLogger
+use Rack::ContentLength
+run Blog
+
 
 use Rack::CommonLogger
 use Rack::ContentLength

@@ -2,8 +2,9 @@ require "erb"
 
 class Basecontroller
 
-	  def initialize(params)
+	  def initialize(id,params)
 	   	@params=params
+	   	@id=id
 	   end   
 
 		def render(template)
