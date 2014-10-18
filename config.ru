@@ -24,6 +24,9 @@ class Blog
 		@path=@request.path
 		@method=@request.request_method
 		params=@request.params	
+		if @path=='/'
+		Rack::Response.new(render "index")
+		else
 	  	controller_class,action,id=get_controller_and_action(@path)
 
         case @method
@@ -33,7 +36,8 @@ class Blog
 		    when 'POST'
 		    	    calling_fuc(controller_class,action,id,params)
 		end
-	end
+	 end
+  end
 
 
 # #Helping function  for request processing
@@ -57,9 +61,6 @@ class Blog
 					 
 					case path
 							when /^\/$/
-								Rack::Response.new(render 'index')
-								return false
-
 							when /^\/(\w+)(\/)?$/
 								
 								controller="#{$1}"	
