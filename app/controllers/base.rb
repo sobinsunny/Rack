@@ -1,4 +1,8 @@
-require "erb"
+require 'rack' 
+require 'erb'
+require 'rubygems'
+require 'rack/server'
+
 
 class Basecontroller
 

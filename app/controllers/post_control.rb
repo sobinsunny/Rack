@@ -9,6 +9,17 @@ class PostController < Basecontroller
 
   def index
      @posts = Post.all
-  	 render "common/index"
+  	 render "post/index"
    end
+   def new
+   	  render "post/new"
+   	 end 
+   def create     
+   	 id=@id;
+   	 post = Post.new(@params)
+	 post.user_id=0;
+	 post.save
+	 return "success"
+   end
+
 end

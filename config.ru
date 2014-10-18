@@ -31,6 +31,7 @@ class Blog
 		    when 'GET'
 		    		calling_fuc(controller_class,action,id,params)	   		
 		    when 'POST'
+		    	    calling_fuc(controller_class,action,id,params)
 		end
 	end
 
@@ -57,6 +58,7 @@ class Blog
 					case path
 							when /^\/$/
 								Rack::Response.new(render 'index')
+								return false
 
 							when /^\/(\w+)(\/)?$/
 								
