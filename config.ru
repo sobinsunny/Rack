@@ -2,13 +2,11 @@ $LOAD_PATH << "."
 require 'rack' 
 require 'erb'
 require 'rubygems'
-
+use Rack::Session::Cookie , :secret => 'change_me'
 require 'rack/server'
-
-use Rack::Static
 use Rack::Static,
 :urls => ["/images", "/js", "/css"],
-:root => "public"
+:root => "/public"
 
 
 class Blog
@@ -24,6 +22,7 @@ class Blog
 		@path=@request.path
 		@method=@request.request_method
 		params=@request.params	
+		@request.session.update(@request.session);
 		if @path=='/'
 		Rack::Response.new(render "index")
 		else
@@ -50,7 +49,8 @@ class Blog
 						if load controller_file
 
 								class_name=contr_name.capitalize+"Controller"
-								ob=eval(class_name+".new(id,params)")
+								ob=eval(class_name+".new(id,params,@request.session)")
+								# ob.session = @request.session
 								Rack::Response.new(ob.send(action))
 						end					           	 	
 
@@ -100,7 +100,3 @@ use Rack::CommonLogger
 use Rack::ContentLength
 run Blog
 
-
-use Rack::CommonLogger
-use Rack::ContentLength
-run Blog

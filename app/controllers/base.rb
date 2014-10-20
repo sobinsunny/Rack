@@ -5,10 +5,12 @@ require 'rack/server'
 
 
 class Basecontroller
+		attr_accessor :session
 
-	  def initialize(id,params)
+	  def initialize(id,params,session)
 	   	@params=params
 	   	@id=id
+	   	@session = session
 	   end   
 
 		def render(template)
