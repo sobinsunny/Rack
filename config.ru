@@ -23,10 +23,8 @@ class Blog
 		@method=@request.request_method
 		params=@request.params	
 		@request.session.update(@request.session);
-		if @path=='/'
-		Rack::Response.new(render "index")
-		else
-	  	controller_class,action,id=get_controller_and_action(@path)
+
+	  	    controller_class,action,id=get_controller_and_action(@path)
 
         case @method
 
@@ -35,7 +33,6 @@ class Blog
 		    when 'POST'
 		    	    calling_fuc(controller_class,action,id,params)
 		end
-	 end
   end
 
 
@@ -50,7 +47,6 @@ class Blog
 
 								class_name=contr_name.capitalize+"Controller"
 								ob=eval(class_name+".new(id,params,@request.session)")
-								# ob.session = @request.session
 								Rack::Response.new(ob.send(action))
 						end					           	 	
 
@@ -61,6 +57,7 @@ class Blog
 					 
 					case path
 							when /^\/$/
+								 return["user","logindir",nil]
 							when /^\/(\w+)(\/)?$/
 								
 								controller="#{$1}"	

@@ -12,7 +12,7 @@ class UserController < Basecontroller
 	     @users=User.all
 	  	 render "user/index"
   end
-		  def login
+		    def login
 			  	 uname=@params["username"]
 			  	 paswd=@params["password_hash"]
 			  	 
@@ -37,4 +37,13 @@ class UserController < Basecontroller
 				session.delete(:user_id)
 				render "user/login"
 		    end
+  			def checker(session)
+			
+				if session.nil?
+					
+				    render "user/index"
+
+				end
+ 			end
+
 end
