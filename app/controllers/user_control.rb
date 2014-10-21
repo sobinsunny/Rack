@@ -14,11 +14,10 @@ class UserController < Basecontroller
   end
 		    def login
 			  	 uname=@params["username"]
-			  	 paswd=@params["password_hash"]
-			  	 
-			  	 @u=User.find_by(username: uname)
-			  	 if @u.password_hash==paswd			  	 	
-			  	 	@id_user=@u.id
+			  	 paswd=@params["password_hash"]	
+			  	 @u=User.find_by_username(uname)
+			  	 @id_user=@u.id 	 
+			  	 if @u.password_hash==paswd		 	
 			  	 	@session[:user_id]=@u.id
 			  	 	@posts=Post.all
 			  	 	render "post/index"	  	 	
@@ -26,8 +25,6 @@ class UserController < Basecontroller
 			  	 else
 			  	 	return "Login not Suceesful"
 			     end 	
-		    end
-		    def profile
 		    end
 		    def logindir
  				render "user/login"
@@ -37,13 +34,24 @@ class UserController < Basecontroller
 				session.delete(:user_id)
 				render "user/login"
 		    end
-  			def checker(session)
-			
-				if session.nil?
-					
-				    render "user/index"
+		    def reg     
+                   	 us= User.new(@params)
+		                	   if (us.save)
+		                	    	render "user/login"
+		                	   else
+		                	    	return "Registration faild"
+                     end	 
 
-				end
- 			end
+		    end
+		    def regi
+				render "user/registration"
+		    end
+		    def destroy
+			@user_id=@session[:user_id]
+            @post_user_id=Post.find(@id).user_id
+            render "post/index"
+			end
+  			
+ 	
 
 end

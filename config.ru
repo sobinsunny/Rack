@@ -29,9 +29,24 @@ class Blog
         case @method
 
 		    when 'GET'
-		    		calling_fuc(controller_class,action,id,params)	   		
+		    	if @request.session.nil?
+		    		  calling_fuc("user","index",id,params)
+		    		else
+		    		    calling_fuc(controller_class,action,id,params)	   		
+		    		end	   		
 		    when 'POST'
-		    	    calling_fuc(controller_class,action,id,params)
+		    	    if @request.session.nil?
+		    		  calling_fuc("user","index",id,params)
+		    		else
+		    		    calling_fuc(controller_class,action,id,params)	   		
+		    	    end	  
+
+		    when 'DELETE'
+		    	    if @request.session.nil?
+		    		  calling_fuc("user","index",id,params)
+		    		else
+		    		    calling_fuc(controller_class,action,id,params)	   		
+		    	    end	   	
 		end
   end
 
